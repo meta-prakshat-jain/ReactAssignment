@@ -17,6 +17,7 @@ function App() {
     },
   });
 
+
   const [newTask, setNewTask] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('Medium');
   const [activeColumn, setActiveColumn] = useState('new');
@@ -47,9 +48,10 @@ function App() {
     setColumns(updatedColumns);
   };
   
-  const handleDragStart = (columnId, item) => {
-    setDraggedItem({ columnId, item });
-  };
+ const handleDragStart = (columnId, item) => {
+  if (columnId === 'completed') return;
+  setDraggedItem({ columnId, item });
+};
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -98,11 +100,12 @@ function App() {
               className="flex-grow p-3 bg-white text-black border border-gray-400"
               onKeyDown={(e) => e.key === 'Enter' && addNewTask()}
             />
+         
 
             <select
               value={activeColumn}
               onChange={(e) => setActiveColumn(e.target.value)}
-              className="p-3 bg-gray-300 text-black border-gray-400"
+              className="text-black"
             >
               {Object.keys(columns).map((columnId) => (
                 <option value={columnId} key={columnId}>
@@ -114,16 +117,17 @@ function App() {
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="p-3 bg-gray-300 text-black border-gray-400"
+              className="text-black "
             >
               <option value="High">High</option>
               <option value="Medium">Medium</option>
               <option value="Low">Low</option>
             </select>
-
-            <button onClick={addNewTask} className="px-8 py-3 text-white cursor-pointer">
+                <button onClick={addNewTask} className="px-8 py-3 text-white cursor-pointer">
               Add
             </button>
+
+           
           </div>
 
           <div className="flex gap-6 overflow-x-auto pb-6 w-full">
@@ -137,9 +141,6 @@ function App() {
 
                 <div className="p-4 text-black font-bold text-xl rounded-t-md bg-gray-400">
                   {columns[columnId].name}
-                  <span className="ml-2 px-2 py-1 bg-gray-800 bg-opacity-30 rounded-full">
-                    {columns[columnId].items.length}
-                  </span>
                 </div>
 
                 <div className="p-3 min-h-64">
@@ -160,7 +161,7 @@ function App() {
                         </span>
                         <button
                           onClick={() => removeTask(columnId, item.id)}
-                          className="ml-auto text-gray-400 hover:text-red-400 transition-colors duration-200 w-6 flex items-center justify-center rounded-full hover:bg-gray-600"
+                          // className="ml-auto text-gray-400 hover:text-red-400 transition-colors duration-200 w-6 flex items-center justify-center rounded-full hover:bg-gray-600"
                         >
                           Delete
                         </button>
